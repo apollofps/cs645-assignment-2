@@ -1,0 +1,338 @@
+<!--
+    File: index.html
+    Author: Aswin
+    Purpose: Main homepage for SWE 645 Assignment 1 with minimalist design, profile image, and link to student survey.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo's SWE 645 Homepage</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fafafa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Navigation */
+        .nav {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: #1a1a1a;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: #ffffff;
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+        
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 2rem;
+            border: 3px solid #f3f4f6;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: #6b7280;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #1a1a1a;
+            color: #ffffff;
+            border: 2px solid #1a1a1a;
+        }
+        
+        .btn-primary:hover {
+            background: #374151;
+            border-color: #374151;
+            color: #ffffff;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #1a1a1a;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .btn-secondary:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+            color: #1a1a1a;
+        }
+        
+        /* Content Sections */
+        .section {
+            padding: 80px 0;
+        }
+        
+        .section-gray {
+            background: #f9fafb;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #1a1a1a;
+            letter-spacing: -0.02em;
+        }
+        
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .about-image {
+            width: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+            height: 300px;
+        }
+        
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #4b5563;
+        }
+        
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+        
+        .feature-card:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #1a1a1a;
+        }
+        
+        .feature-description {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: #9ca3af;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-links {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: 400;
+        }
+        
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-container">
+                <a href="#home" class="nav-brand">Apollo</a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="survey.html" class="nav-link">Survey</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="hero">
+        <div class="container">
+            <img src="https://media.giphy.com/media/13GIgrGdslD9oQ/giphy.gif" 
+                 alt="Typing Cat Animated Meme" class="profile-image">
+            <h1>Apollo's Homepage</h1>
+            <p>
+                Hello! I'm Aswin, a CS student currently enrolled in 
+                SWE 645. This course focuses on 
+                modern web development practices, cloud deployment strategies, and building 
+                scalable web applications using contemporary technologies.
+            </p>
+            <div class="btn-group">
+                <a href="survey.html" class="btn btn-primary">Take Student Survey</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="survey.html">Student Survey</a>
+                <a href="error.html">Error Page</a>
+            </div>
+            <p>&copy; 2025 Apollo - SWE 645 Assignment 1. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

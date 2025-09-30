@@ -1,0 +1,525 @@
+<!--
+    File: survey.html
+    Author: Aswin
+    Purpose: Student Survey form for SWE 645 Assignment 1 with comprehensive validation, required fields, and user-friendly interface.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Survey - Apollo's SWE 645 Homepage</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fafafa;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .survey-container {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            margin: 40px auto;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .survey-header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .survey-header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .survey-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .survey-body {
+            padding: 40px;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .required {
+            color: #dc2626;
+        }
+        
+        .form-control, .form-select {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            background: #ffffff;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+        }
+        .checkbox-group, .radio-group {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .form-check {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-check-input {
+            margin-right: 8px;
+            margin-top: 0;
+        }
+        
+        .form-check-input:checked {
+            background-color: #1a1a1a;
+            border-color: #1a1a1a;
+        }
+        
+        .form-check-label {
+            color: #374151;
+            font-size: 0.95rem;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            margin-right: 12px;
+        }
+        
+        .btn-submit {
+            background: #1a1a1a;
+            color: #ffffff;
+            border-color: #1a1a1a;
+        }
+        
+        .btn-submit:hover {
+            background: #374151;
+            border-color: #374151;
+        }
+        
+        .btn-cancel {
+            background: transparent;
+            color: #6b7280;
+            border-color: #d1d5db;
+        }
+        
+        .btn-cancel:hover {
+            background: #f9fafb;
+            color: #374151;
+            border-color: #9ca3af;
+        }
+        .error-message {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 6px;
+            display: none;
+        }
+        
+        .nav-link-custom {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 400;
+            margin-top: 16px;
+            display: inline-block;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link-custom:hover {
+            color: #1a1a1a;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+            margin-top: 32px;
+        }
+        
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        
+        .col-md-6, .col-md-4 {
+            padding: 0 10px;
+            margin-bottom: 20px;
+        }
+        
+        .col-md-6 {
+            flex: 0 0 50%;
+        }
+        
+        .col-md-4 {
+            flex: 0 0 33.333333%;
+        }
+        
+        @media (max-width: 768px) {
+            .col-md-6, .col-md-4 {
+                flex: 0 0 100%;
+            }
+            
+            .survey-header, .survey-body {
+                padding: 24px;
+            }
+            
+            .survey-header h1 {
+                font-size: 1.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="survey-container">
+            <div class="survey-header">
+                <h1>Student Survey Form</h1>
+                <p class="mb-0">Help us improve your university experience by sharing your feedback</p>
+                <a href="index.html" class="nav-link-custom">← Back to Homepage</a>
+            </div>
+            
+            <div class="survey-body">
+                <form id="surveyForm" novalidate>
+                    <!-- Personal Information Section -->
+                    <h3 class="section-title">Personal Information</h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="firstName" class="form-label">First Name <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                <div class="error-message" id="firstNameError">Please enter your first name.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="lastName" class="form-label">Last Name <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                <div class="error-message" id="lastNameError">Please enter your last name.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="streetAddress" class="form-label">Street Address <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="streetAddress" name="streetAddress" required>
+                        <div class="error-message" id="streetAddressError">Please enter your street address.</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="city" class="form-label">City <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="city" name="city" required>
+                                <div class="error-message" id="cityError">Please enter your city.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="state" class="form-label">State <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="state" name="state" required>
+                                <div class="error-message" id="stateError">Please enter your state.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="zip" class="form-label">ZIP Code <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="zip" name="zip" pattern="[0-9]{5}" required>
+                                <div class="error-message" id="zipError">Please enter a valid 5-digit ZIP code.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="telephone" class="form-label">Telephone Number <span class="required">*</span></label>
+                                <input type="tel" class="form-control" id="telephone" name="telephone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required>
+                                <div class="error-message" id="telephoneError">Please enter a valid phone number (123-456-7890).</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address <span class="required">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <div class="error-message" id="emailError">Please enter a valid email address.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="surveyDate" class="form-label">Date of Survey <span class="required">*</span></label>
+                        <input type="date" class="form-control" id="surveyDate" name="surveyDate" required>
+                        <div class="error-message" id="surveyDateError">Please select the survey date.</div>
+                    </div>
+
+                    <!-- Campus Preferences Section -->
+                    <h3 class="section-title">Campus Experience</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">What did you like most about the campus? (Check all that apply)</label>
+                        <div class="checkbox-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="likedStudents" name="campusLikes" value="students">
+                                <label class="form-check-label" for="likedStudents">Students</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="likedLocation" name="campusLikes" value="location">
+                                <label class="form-check-label" for="likedLocation">Location</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="likedCampus" name="campusLikes" value="campus">
+                                <label class="form-check-label" for="likedCampus">Campus</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="likedAtmosphere" name="campusLikes" value="atmosphere">
+                                <label class="form-check-label" for="likedAtmosphere">Atmosphere</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="likedDorms" name="campusLikes" value="dorm rooms">
+                                <label class="form-check-label" for="likedDorms">Dorm Rooms</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="likedSports" name="campusLikes" value="sports">
+                                <label class="form-check-label" for="likedSports">Sports</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">How did you become interested in the university?</label>
+                        <div class="radio-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="interestedFriends" name="interest" value="friends">
+                                <label class="form-check-label" for="interestedFriends">Friends</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="interestedTV" name="interest" value="television">
+                                <label class="form-check-label" for="interestedTV">Television</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="interestedInternet" name="interest" value="internet">
+                                <label class="form-check-label" for="interestedInternet">Internet</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="interestedOther" name="interest" value="other">
+                                <label class="form-check-label" for="interestedOther">Other</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recommendation" class="form-label">How likely are you to recommend this school to other prospective students?</label>
+                        <select class="form-select" id="recommendation" name="recommendation">
+                            <option value="">Please select an option</option>
+                            <option value="very likely">Very Likely</option>
+                            <option value="likely">Likely</option>
+                            <option value="unlikely">Unlikely</option>
+                        </select>
+                    </div>
+
+                    <!-- Raffle Section -->
+                    <h3 class="section-title">Raffle Entry</h3>
+                    
+                    <div class="form-group">
+                        <label for="raffle" class="form-label">Raffle Numbers <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="raffle" name="raffle" 
+                               placeholder="Enter at least 10 comma-separated numbers (1-100): e.g., 5,23,47,12,89,34,67,91,15,78" required>
+                        <div class="error-message" id="raffleError">Please enter at least 10 comma-separated numbers between 1 and 100.</div>
+                        <small class="form-text text-muted">Enter at least ten comma-separated numbers ranging from 1 through 100. This information will be used to announce whether you win a free movie ticket!</small>
+                    </div>
+
+                    <!-- Additional Comments Section -->
+                    <h3 class="section-title">Additional Feedback</h3>
+                    
+                    <div class="form-group">
+                        <label for="comments" class="form-label">Additional Comments</label>
+                        <textarea class="form-control" id="comments" name="comments" rows="5" 
+                                  placeholder="Please share any additional thoughts or suggestions about your university experience..."></textarea>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div style="text-align: center; margin-top: 40px;">
+                        <button type="submit" class="btn btn-submit">Submit Survey</button>
+                        <button type="button" class="btn btn-cancel" onclick="resetForm()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Custom JavaScript for Form Validation -->
+    <script>
+        document.getElementById('surveyDate').valueAsDate = new Date();
+
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let isValid = true;
+            
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.style.display = 'none');
+            
+            const formControls = document.querySelectorAll('.form-control, .form-select');
+            formControls.forEach(control => {
+                control.style.borderColor = '#e9ecef';
+            });
+
+            const requiredFields = ['firstName', 'lastName', 'streetAddress', 'city', 'state', 'zip', 'telephone', 'email', 'surveyDate', 'raffle'];
+            
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                const errorDiv = document.getElementById(fieldId + 'Error');
+                
+                if (!field.value.trim()) {
+                    showError(field, errorDiv);
+                    isValid = false;
+                }
+            });
+
+            const email = document.getElementById('email');
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email.value.trim() && !emailPattern.test(email.value)) {
+                showError(email, document.getElementById('emailError'));
+                document.getElementById('emailError').textContent = 'Please enter a valid email address.';
+                isValid = false;
+            }
+
+            const phone = document.getElementById('telephone');
+            const phonePattern = /^\d{3}-\d{3}-\d{4}$/;
+            if (phone.value.trim() && !phonePattern.test(phone.value)) {
+                showError(phone, document.getElementById('telephoneError'));
+                isValid = false;
+            }
+
+            const zip = document.getElementById('zip');
+            const zipPattern = /^\d{5}$/;
+            if (zip.value.trim() && !zipPattern.test(zip.value)) {
+                showError(zip, document.getElementById('zipError'));
+                isValid = false;
+            }
+
+            const raffle = document.getElementById('raffle');
+            const raffleError = document.getElementById('raffleError');
+            if (raffle.value.trim()) {
+                const numbers = raffle.value.split(',').map(n => n.trim()).filter(n => n);
+                let raffleValid = true;
+                
+                if (numbers.length < 10) {
+                    raffleValid = false;
+                    raffleError.textContent = 'Please enter at least 10 numbers.';
+                } else {
+                    for (let num of numbers) {
+                        const n = parseInt(num);
+                        if (isNaN(n) || n < 1 || n > 100) {
+                            raffleValid = false;
+                            raffleError.textContent = 'All numbers must be between 1 and 100.';
+                            break;
+                        }
+                    }
+                }
+                
+                if (!raffleValid) {
+                    showError(raffle, raffleError);
+                    isValid = false;
+                }
+            } else {
+                showError(raffle, raffleError);
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert('Thank you for your feedback! Your survey has been submitted successfully.');
+                resetForm();
+            } else {
+                const firstError = document.querySelector('.error-message[style*="block"]');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+
+        function showError(field, errorDiv) {
+            field.style.borderColor = '#e74c3c';
+            errorDiv.style.display = 'block';
+        }
+
+        function resetForm() {
+            document.getElementById('surveyForm').reset();
+            document.getElementById('surveyDate').valueAsDate = new Date();
+            
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.style.display = 'none');
+            
+            const formControls = document.querySelectorAll('.form-control, .form-select');
+            formControls.forEach(control => {
+                control.style.borderColor = '#e9ecef';
+            });
+        }
+
+        document.getElementById('telephone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 6) {
+                value = value.substring(0,3) + '-' + value.substring(3,6) + '-' + value.substring(6,10);
+            } else if (value.length >= 3) {
+                value = value.substring(0,3) + '-' + value.substring(3);
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!--
+    File: error.html
+    Author: Aswin
+    Purpose: Custom 404 error page for SWE 645 Assignment 1 with clean design and navigation back to main site.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Apollo's SWE 645 Homepage</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fafafa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .error-container {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 24px;
+            color: #6b7280;
+        }
+        
+        .error-code {
+            font-size: 6rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        
+        .error-message {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+        
+        .error-description {
+            color: #6b7280;
+            margin-bottom: 40px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #1a1a1a;
+            color: #ffffff;
+            border: 2px solid #1a1a1a;
+        }
+        
+        .btn-primary:hover {
+            background: #374151;
+            border-color: #374151;
+            color: #ffffff;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #1a1a1a;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .btn-secondary:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+            color: #1a1a1a;
+        }
+        
+        .footer-text {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+        
+        @media (max-width: 480px) {
+            .error-container {
+                padding: 40px 24px;
+            }
+            
+            .error-code {
+                font-size: 4rem;
+            }
+            
+            .error-message {
+                font-size: 1.25rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <div class="error-code">404</div>
+        <h2 class="error-message">Page Not Found</h2>
+        <p class="error-description">
+            The page you are looking for might have been removed, had its name changed, 
+            or is temporarily unavailable. Don't worry, it happens to the best of us!
+        </p>
+        <div class="btn-group">
+            <a href="index.html" class="btn btn-primary">Go Home</a>
+            <a href="survey.html" class="btn btn-secondary">Take Survey</a>
+        </div>
+        <div class="footer-text">
+            If you believe this is an error, please contact the site administrator.<br>
+            Apollo's SWE 645 Assignment 1 - Error Page
+        </div>
+    </div>
+</body>
+</html>
