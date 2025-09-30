@@ -15,8 +15,10 @@ This project containerizes the Student Survey web application from Assignment 1 
 
 ### Jenkins CI/CD
 - **Jenkins Dashboard**: http://34.133.54.193
-- **Pipeline Job**: student-survey-pipeline
-- **Automated Build**: Triggers on GitHub push events
+- **Login**: admin / admin123
+- **Status**: ✅ Fully configured and ready for pipeline creation
+- **Service Account**: jenkins-ci@alpine-beacon-473720-s5.iam.gserviceaccount.com
+- **Setup Guide**: See JENKINS_SETUP.md for pipeline configuration
 
 ## Architecture
 

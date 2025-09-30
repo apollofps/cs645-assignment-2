@@ -1,33 +1,60 @@
 steps:
-# Build the Docker image
-- name: 'gcr.io/cloud-builders/docker'
-  args: 
-  - 'build'
-  - '-t'
-  - 'gcr.io/$PROJECT_ID/student-survey:$COMMIT_SHA'
-  - '-t'
-  - 'gcr.io/$PROJECT_ID/student-survey:latest'
-  - '.'
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: 
+      - 'build'
+      - '--platform=linux/amd64'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/student-survey:$BUILD_ID'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/student-survey:latest'
+      - '.'
 
-# Push the image to Container Registry
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-  - 'push'
-  - 'gcr.io/$PROJECT_ID/student-survey:$COMMIT_SHA'
+  # Push the image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/student-survey:$BUILD_ID'
 
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-  - 'push'
-  - 'gcr.io/$PROJECT_ID/student-survey:latest'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/student-survey:latest'
 
-# Deploy to GKE
-- name: 'gcr.io/cloud-builders/gke-deploy'
-  args:
-  - run
-  - --filename=k8s-deployment.yaml
-  - --image=gcr.io/$PROJECT_ID/student-survey:$COMMIT_SHA
-  - --location=us-central1
-  - --cluster=swe645-autopilot-cluster
+  # Deploy to GKE using kubectl
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'set'
+      - 'image'
+      - 'deployment/student-survey-app'
+      - 'student-survey=gcr.io/$PROJECT_ID/student-survey:$BUILD_ID'
+      - '-n'
+      - 'swe645'
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=swe645-autopilot-cluster'
+
+  # Wait for rollout to complete
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'rollout'
+      - 'status'
+      - 'deployment/student-survey-app'
+      - '-n'
+      - 'swe645'
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=swe645-autopilot-cluster'
 
 options:
   logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
+
+substitutions:
+  _CLUSTER_NAME: 'swe645-autopilot-cluster'
+  _CLUSTER_LOCATION: 'us-central1'
+  _NAMESPACE: 'swe645'
+
+images:
+  - 'gcr.io/$PROJECT_ID/student-survey:$BUILD_ID'
+  - 'gcr.io/$PROJECT_ID/student-survey:latest'
