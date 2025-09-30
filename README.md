@@ -13,6 +13,11 @@ This project containerizes the Student Survey web application from Assignment 1 
 ### GitHub Repository
 - **Source Code**: https://github.com/apollofps/cs645-assignment-2
 
+### Jenkins CI/CD
+- **Jenkins Dashboard**: http://34.133.54.193
+- **Pipeline Job**: student-survey-pipeline
+- **Automated Build**: Triggers on GitHub push events
+
 ## Architecture
 
 ### Container Technology
@@ -24,14 +29,14 @@ This project containerizes the Student Survey web application from Assignment 1 
 - **Cluster**: GKE Autopilot cluster in us-central1 region
 - **Project ID**: alpine-beacon-473720-s5
 - **Namespace**: swe645
-- **Replicas**: Currently 1 (scalable 1-10 with HPA)
+- **Replicas**: 3 pods running (scalable 1-10 with HPA)
 - **Load Balancer**: External LoadBalancer service for public access
 
 ### CI/CD Pipeline
 - **Source Control**: GitHub
-- **Build System**: Google Cloud Build
+- **Build System**: Jenkins on GKE
 - **Container Registry**: Google Container Registry
-- **Deployment**: Automated deployment to GKE
+- **Deployment**: Automated deployment to GKE via Jenkins pipeline
 
 ## Files Structure
 
@@ -45,7 +50,9 @@ This project containerizes the Student Survey web application from Assignment 1 
 ├── k8s-namespace.yaml         # Kubernetes namespace
 ├── k8s-deployment.yaml        # Deployment and service manifests
 ├── k8s-hpa.yaml              # Horizontal Pod Autoscaler
-├── cloudbuild.yaml           # Cloud Build configuration
+├── jenkins-deployment.yaml   # Jenkins CI/CD server deployment
+├── Jenkinsfile               # Jenkins pipeline configuration
+├── JENKINS_SETUP.md          # Jenkins setup and configuration guide
 └── README.md                 # This documentation
 ```
 
@@ -88,7 +95,19 @@ kubectl apply -f k8s-deployment.yaml
 kubectl apply -f k8s-hpa.yaml
 ```
 
-### Step 4: Build and Push Container (if needed)
+### Step 4: Deploy Jenkins CI/CD
+```bash
+# Deploy Jenkins to cluster
+kubectl apply -f jenkins-deployment.yaml
+
+# Get Jenkins external IP
+kubectl get services -n jenkins
+
+# Follow Jenkins setup guide
+# See JENKINS_SETUP.md for detailed configuration instructions
+```
+
+### Step 5: Build and Push Container (if needed)
 ```bash
 # Configure Docker for GCR
 gcloud auth configure-docker
@@ -161,11 +180,12 @@ kubectl get hpa -n swe645
 ## Assignment Requirements Fulfilled
 
 ✅ **Containerization**: Application containerized using Docker with Tomcat base image  
-✅ **Kubernetes Deployment**: Deployed on GKE with minimum 3 pods capability (currently 1 due to quota)  
-✅ **CI/CD Pipeline**: Cloud Build configuration for automated builds and deployments  
+✅ **Kubernetes Deployment**: Deployed on GKE with 3 pods running at all times  
+✅ **CI/CD Pipeline**: Jenkins pipeline for automated build and deployment from GitHub  
 ✅ **Source Control**: GitHub repository with complete source code  
-✅ **Documentation**: Comprehensive README with URLs and setup instructions  
+✅ **Documentation**: Comprehensive README and Jenkins setup guide with URLs  
 ✅ **Public Access**: Application accessible via external LoadBalancer IP  
+✅ **Jenkins Integration**: Automated CI/CD with GitHub webhooks and GKE deployment  
 
 ## Author
 **Apollo (Aswin)**  
