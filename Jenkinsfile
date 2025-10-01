@@ -27,6 +27,14 @@ pipeline {
                             echo "Source commit: \$(git rev-parse HEAD)"
                             echo "Building image: ${IMAGE_TAG}"
                             
+                            # Install gcloud if not present
+                            if ! command -v gcloud &> /dev/null; then
+                                echo "📦 Installing Google Cloud SDK..."
+                                curl https://sdk.cloud.google.com | bash -s -- --disable-prompts
+                                source ~/.bashrc
+                                export PATH=\$PATH:\$HOME/google-cloud-sdk/bin
+                            fi
+                            
                             # Authenticate with GCP using service account
                             gcloud auth activate-service-account --key-file=\${GOOGLE_APPLICATION_CREDENTIALS}
                             gcloud config set project ${PROJECT_ID}

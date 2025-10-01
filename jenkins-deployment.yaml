@@ -66,7 +66,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: jenkins
-        image: gcr.io/alpine-beacon-473720-s5/jenkins-gcloud:latest
+        image: jenkins/jenkins:lts
         ports:
         - containerPort: 8080
         - containerPort: 50000
