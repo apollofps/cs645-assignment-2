@@ -20,28 +20,19 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 script {
-                    echo 'Building and deploying application with Cloud Build...'
+                    echo '🚀 Starting Cloud Build deployment...'
+                    echo "Source commit: ${env.GIT_COMMIT}"
+                    echo "Building image: ${IMAGE_TAG}"
+                    
                     sh """
-                        echo "🚀 Starting AUTOMATED deployment validation..."
-                        echo "Source commit: \$(git rev-parse HEAD)"
-                        echo "Building image: ${IMAGE_TAG}"
-                        echo ""
-                        echo "✅ Code validation complete!"
-                        echo "📋 Jenkins has successfully:"
-                        echo "  - ✅ Fetched latest code from GitHub"
-                        echo "  - ✅ Validated all files and structure"  
-                        echo "  - ✅ Confirmed deployment readiness"
-                        echo ""
-                        echo "🚀 To deploy your changes, run:"
-                        echo "   gcloud builds submit --config=cloudbuild.yaml --project=${PROJECT_ID}"
-                        echo ""
-                        echo "🌐 After deployment, changes will be live at:"
-                        echo "   http://34.59.226.237"
-                        echo "   http://34.59.226.237/survey.html"
-                        echo ""
-                        echo "✨ GitHub → Jenkins automation: WORKING ✅"
-                        echo "💡 Next: Add Cloud Build trigger for full automation"
+                        # Trigger Cloud Build
+                        gcloud builds submit \
+                            --config=cloudbuild.yaml \
+                            --project=${PROJECT_ID} \
+                            --substitutions=_BUILD_ID=${env.BUILD_NUMBER}
                     """
+                    
+                    echo "✅ Cloud Build triggered successfully!"
                 }
             }
         }
@@ -51,14 +42,21 @@ pipeline {
                 script {
                     echo 'Verifying deployment...'
                     sh """
-                        echo "Checking deployment status..."
+                        # Wait for deployment to complete
+                        echo "Waiting for deployment to rollout..."
+                        sleep 30
                         
-                        # Wait a moment for deployment to start
-                        sleep 10
+                        # Check deployment status
+                        gcloud container clusters get-credentials ${CLUSTER_NAME} \
+                            --region=${CLUSTER_ZONE} \
+                            --project=${PROJECT_ID}
                         
-                        echo "Deployment verification completed"
-                        echo "Application available at: http://34.59.226.237"
-                        echo "Survey form at: http://34.59.226.237/survey.html"
+                        kubectl rollout status deployment/student-survey-app -n ${NAMESPACE}
+                        
+                        echo ""
+                        echo "✅ Deployment verification completed"
+                        echo "🌐 Application available at: http://34.59.226.237"
+                        echo "📋 Survey form at: http://34.59.226.237/survey.html"
                     """
                 }
             }

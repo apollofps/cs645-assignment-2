@@ -68,7 +68,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: jenkins
-        image: jenkins/jenkins:lts
+        image: gcr.io/alpine-beacon-473720-s5/jenkins-gcloud:latest
         ports:
         - containerPort: 8080
         - containerPort: 50000
@@ -84,11 +84,16 @@ spec:
           value: "--httpPort=8080"
         - name: JAVA_OPTS
           value: "-Djenkins.install.runSetupWizard=true"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /var/secrets/google/key.json
         volumeMounts:
         - name: jenkins-home
           mountPath: /var/jenkins_home
         - name: jenkins-init-script
           mountPath: /usr/share/jenkins/ref/init.groovy.d/
+        - name: gcp-credentials
+          mountPath: /var/secrets/google
+          readOnly: true
       volumes:
       - name: jenkins-home
         persistentVolumeClaim:
@@ -96,6 +101,9 @@ spec:
       - name: jenkins-init-script
         configMap:
           name: jenkins-init-script
+      - name: gcp-credentials
+        secret:
+          secretName: gcp-credentials
 ---
 apiVersion: v1
 kind: Service
