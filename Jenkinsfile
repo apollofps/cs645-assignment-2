@@ -28,8 +28,7 @@ pipeline {
                         # Trigger Cloud Build
                         gcloud builds submit \
                             --config=cloudbuild.yaml \
-                            --project=${PROJECT_ID} \
-                            --substitutions=_BUILD_ID=${env.BUILD_NUMBER}
+                            --project=${PROJECT_ID}
                     """
                     
                     echo "✅ Cloud Build triggered successfully!"
