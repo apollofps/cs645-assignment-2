@@ -63,7 +63,9 @@ spec:
     spec:
       serviceAccountName: jenkins
       securityContext:
-        fsGroup: 1000
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
       containers:
       - name: jenkins
         image: jenkins/jenkins:lts

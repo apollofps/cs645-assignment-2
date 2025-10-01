@@ -27,21 +27,43 @@ pipeline {
                             echo "Source commit: \$(git rev-parse HEAD)"
                             echo "Building image: ${IMAGE_TAG}"
                             
-                            # Since gcloud installation is complex in Jenkins, we'll use the Cloud Build REST API
-                            echo "📦 Triggering Cloud Build via REST API..."
+                            # Install gcloud CLI (running as root now)
+                            if ! command -v gcloud &> /dev/null; then
+                                echo "📦 Installing Google Cloud SDK..."
+                                
+                                # Update package list
+                                apt-get update -y
+                                
+                                # Install required packages
+                                apt-get install -y apt-transport-https ca-certificates gnupg curl lsb-release python3 python3-pip
+                                
+                                # Add Google Cloud SDK repository
+                                echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+                                
+                                # Import Google Cloud public key
+                                curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+                                
+                                # Update and install gcloud
+                                apt-get update -y
+                                apt-get install -y google-cloud-cli
+                                
+                                echo "✅ Google Cloud SDK installed successfully"
+                            else
+                                echo "✅ Google Cloud SDK already installed"
+                            fi
                             
-                            # Get OAuth token using service account
-                            ACCESS_TOKEN=\$(curl -s -X POST -H "Content-Type: application/json" \\
-                                -d "{\\"type\\": \\"service_account\\", \\"project_id\\": \\"alpine-beacon-473720-s5\\", \\"private_key_id\\": \\"\$(cat \${GOOGLE_APPLICATION_CREDENTIALS} | jq -r .private_key_id)\\", \\"private_key\\": \\"\$(cat \${GOOGLE_APPLICATION_CREDENTIALS} | jq -r .private_key)\\", \\"client_email\\": \\"\$(cat \${GOOGLE_APPLICATION_CREDENTIALS} | jq -r .client_email)\\", \\"client_id\\": \\"\$(cat \${GOOGLE_APPLICATION_CREDENTIALS} | jq -r .client_id)\\", \\"auth_uri\\": \\"https://accounts.google.com/o/oauth2/auth\\", \\"token_uri\\": \\"https://oauth2.googleapis.com/token\\"}" \\
-                                "https://oauth2.googleapis.com/token?grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=\$(echo 'jwt_token_here')")
+                            # Authenticate with GCP
+                            echo "🔐 Authenticating with Google Cloud..."
+                            gcloud auth activate-service-account --key-file=\${GOOGLE_APPLICATION_CREDENTIALS}
+                            gcloud config set project ${PROJECT_ID}
                             
-                            echo "⚠️  REST API approach is complex. Using Cloud Build trigger instead..."
-                            echo "🔧 To complete automation:"
-                            echo "   1. Set up Cloud Build trigger in Google Console"
-                            echo "   2. Or run manually: gcloud builds submit --config=cloudbuild.yaml --project=${PROJECT_ID}"
-                            echo ""
-                            echo "✅ CI/CD validation complete - Jenkins successfully validates all changes!"
-                            echo "🌐 Manual deployment: Run 'gcloud builds submit' to deploy to http://34.59.226.237"
+                            echo "📦 Submitting to Cloud Build for automated deployment..."
+                            # Submit to Cloud Build
+                            gcloud builds submit --config=cloudbuild.yaml --project=${PROJECT_ID} --substitutions=_BUILD_ID=${env.BUILD_NUMBER}
+                            
+                            echo "✅ FULLY AUTOMATED deployment complete!"
+                            echo "🌐 Your changes are now live at: http://34.59.226.237"
+                            echo "📝 Survey form: http://34.59.226.237/survey.html"
                         """
                     }
                 }
