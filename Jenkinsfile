@@ -20,28 +20,23 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 script {
-                    echo 'Building and deploying application...'
-                    sh """
-                        echo "Building Docker image: ${IMAGE_TAG}"
-                        echo "Source commit: \$(git rev-parse HEAD)"
-                        
-                        # For now, we'll use a workaround since gcloud isn't available in Jenkins
-                        # This demonstrates the CI/CD flow - in production, you'd either:
-                        # 1. Use a Jenkins agent with gcloud/kubectl installed
-                        # 2. Use Cloud Build triggers
-                        # 3. Use a custom Jenkins image with tools pre-installed
-                        
-                        echo "✅ Would trigger Cloud Build to:"
-                        echo "  - Build image: ${IMAGE_TAG}"
-                        echo "  - Push to GCR"
-                        echo "  - Deploy to GKE cluster: ${CLUSTER_NAME}"
-                        echo "  - Update 3 pods in namespace: ${NAMESPACE}"
-                        
-                        echo "💡 To make this fully functional:"
-                        echo "  - Run: gcloud builds submit --config=cloudbuild.yaml --project=${PROJECT_ID}"
-                        echo "  - Or set up Cloud Build triggers"
-                        echo "  - Or use custom Jenkins image with gcloud/kubectl"
-                    """
+                    echo 'Building and deploying application with Cloud Build...'
+                    withCredentials([file(credentialsId: 'gcp-service-account', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                        sh """
+                            echo "🚀 Starting automated deployment..."
+                            echo "Source commit: \$(git rev-parse HEAD)"
+                            echo "Building image: ${IMAGE_TAG}"
+                            
+                            # Authenticate with GCP
+                            gcloud auth activate-service-account --key-file=\${GOOGLE_APPLICATION_CREDENTIALS}
+                            gcloud config set project ${PROJECT_ID}
+                            
+                            # Submit to Cloud Build for automated build and deployment
+                            gcloud builds submit --config=cloudbuild.yaml --project=${PROJECT_ID} --substitutions=_BUILD_ID=${env.BUILD_NUMBER}
+                            
+                            echo "✅ Deployment submitted to Cloud Build!"
+                        """
+                    }
                 }
             }
         }

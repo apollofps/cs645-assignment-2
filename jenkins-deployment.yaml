@@ -66,7 +66,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: jenkins
-        image: jenkins/jenkins:lts
+        image: gcr.io/alpine-beacon-473720-s5/jenkins-gcloud:latest
         ports:
         - containerPort: 8080
         - containerPort: 50000
@@ -82,34 +82,11 @@ spec:
           value: "--httpPort=8080"
         - name: JAVA_OPTS
           value: "-Djenkins.install.runSetupWizard=true"
-        - name: DOCKER_HOST
-          value: "tcp://localhost:2376"
-        - name: DOCKER_TLS_VERIFY
-          value: "1"
-        - name: DOCKER_CERT_PATH
-          value: "/certs/client"
         volumeMounts:
         - name: jenkins-home
           mountPath: /var/jenkins_home
         - name: jenkins-init-script
           mountPath: /usr/share/jenkins/ref/init.groovy.d/
-        - name: docker-certs
-          mountPath: /certs/client
-          readOnly: true
-      - name: docker-dind
-        image: docker:25-dind
-        securityContext:
-          privileged: true
-        env:
-        - name: DOCKER_TLS_CERTDIR
-          value: "/certs"
-        - name: DOCKER_TLS_VERIFY
-          value: "1"
-        volumeMounts:
-        - name: docker-certs
-          mountPath: /certs/client
-        - name: docker-storage
-          mountPath: /var/lib/docker
       volumes:
       - name: jenkins-home
         persistentVolumeClaim:
@@ -117,10 +94,6 @@ spec:
       - name: jenkins-init-script
         configMap:
           name: jenkins-init-script
-      - name: docker-certs
-        emptyDir: {}
-      - name: docker-storage
-        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
