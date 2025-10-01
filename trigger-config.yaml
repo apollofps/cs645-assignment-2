@@ -1,0 +1,10 @@
+name: github-auto-deploy
+description: Automatic deployment from GitHub pushes
+github:
+  owner: apollofps
+  name: cs645-assignment-2
+  push:
+    branch: main
+filename: cloudbuild.yaml
+substitutions:
+  _BUILD_ID: $(BUILD_ID)
