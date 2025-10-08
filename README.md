@@ -1,19 +1,23 @@
 # SWE645 Assignment 2: Containerized Student Survey Application
 
 ## Overview
+
 This project containerizes the Student Survey web application from Assignment 1 and deploys it on Google Kubernetes Engine (GKE) with a CI/CD pipeline using Cloud Build.
 
 ## Application URLs
 
 ### Production Application
+
 - **Homepage**: http://34.59.226.237
 - **Student Survey**: http://34.59.226.237/survey.html
 - **Error Page**: http://34.59.226.237/error.html
 
 ### GitHub Repository
+
 - **Source Code**: https://github.com/apollofps/cs645-assignment-2
 
 ### Jenkins CI/CD
+
 - **Jenkins Dashboard**: http://34.133.54.193
 - **Login**: admin / admin123
 - **Status**: ✅ Fully configured and ready for pipeline creation
@@ -23,11 +27,13 @@ This project containerizes the Student Survey web application from Assignment 1 
 ## Architecture
 
 ### Container Technology
+
 - **Base Image**: tomcat:9.0-jdk11-openjdk
 - **Application**: Java web application (.war file) with static HTML files
 - **Container Registry**: Google Container Registry (gcr.io)
 
 ### Kubernetes Deployment
+
 - **Cluster**: GKE Autopilot cluster in us-central1 region
 - **Project ID**: alpine-beacon-473720-s5
 - **Namespace**: swe645
@@ -35,6 +41,7 @@ This project containerizes the Student Survey web application from Assignment 1 
 - **Load Balancer**: External LoadBalancer service for public access
 
 ### CI/CD Pipeline
+
 - **Source Control**: GitHub
 - **Build System**: Jenkins on GKE
 - **Container Registry**: Google Container Registry
@@ -61,6 +68,7 @@ This project containerizes the Student Survey web application from Assignment 1 
 ## Deployment Instructions
 
 ### Prerequisites
+
 1. Google Cloud account with billing enabled
 2. gcloud CLI installed and configured
 3. kubectl installed
@@ -68,6 +76,7 @@ This project containerizes the Student Survey web application from Assignment 1 
 5. GitHub account
 
 ### Step 1: Set up GCP Project
+
 ```bash
 # Set your project
 gcloud config set project alpine-beacon-473720-s5
@@ -77,6 +86,7 @@ gcloud services enable container.googleapis.com cloudbuild.googleapis.com
 ```
 
 ### Step 2: Create GKE Cluster
+
 ```bash
 # Create Autopilot cluster
 gcloud container clusters create-auto swe645-autopilot-cluster --region=us-central1
@@ -86,6 +96,7 @@ gcloud container clusters get-credentials swe645-autopilot-cluster --region=us-c
 ```
 
 ### Step 3: Deploy Application
+
 ```bash
 # Create namespace
 kubectl apply -f k8s-namespace.yaml
@@ -98,6 +109,7 @@ kubectl apply -f k8s-hpa.yaml
 ```
 
 ### Step 4: Deploy Jenkins CI/CD
+
 ```bash
 # Deploy Jenkins to cluster
 kubectl apply -f jenkins-deployment.yaml
@@ -110,6 +122,7 @@ kubectl get services -n jenkins
 ```
 
 ### Step 5: Build and Push Container (if needed)
+
 ```bash
 # Configure Docker for GCR
 gcloud auth configure-docker
@@ -124,6 +137,7 @@ docker push gcr.io/alpine-beacon-473720-s5/student-survey:v2
 ## Application Features
 
 ### Student Survey Form
+
 - Personal information collection (name, address, contact)
 - Campus experience feedback
 - Interest source tracking
@@ -132,6 +146,7 @@ docker push gcr.io/alpine-beacon-473720-s5/student-survey:v2
 - Form validation with error handling
 
 ### Responsive Design
+
 - Mobile-friendly interface
 - Clean, modern UI with Inter font family
 - Consistent styling across all pages
@@ -140,15 +155,18 @@ docker push gcr.io/alpine-beacon-473720-s5/student-survey:v2
 ## Monitoring and Scaling
 
 ### Health Checks
+
 - **Readiness Probe**: HTTP GET / on port 8080 (30s delay, 10s interval)
 - **Liveness Probe**: HTTP GET / on port 8080 (60s delay, 30s interval)
 
 ### Resource Limits
+
 - **CPU**: 250m request, 500m limit
 - **Memory**: 256Mi request, 512Mi limit
 - **Storage**: 1Gi ephemeral storage
 
 ### Auto-scaling
+
 - **Horizontal Pod Autoscaler**: 1-10 replicas
 - **CPU Target**: 70% utilization
 - **Memory Target**: 80% utilization
@@ -162,6 +180,7 @@ docker push gcr.io/alpine-beacon-473720-s5/student-survey:v2
 3. **Service Unavailable**: Check pod readiness and service endpoints
 
 ### Useful Commands
+
 ```bash
 # Check pod status
 kubectl get pods -n swe645
@@ -181,18 +200,10 @@ kubectl get hpa -n swe645
 
 ## Assignment Requirements Fulfilled
 
-✅ **Containerization**: Application containerized using Docker with Tomcat base image  
-✅ **Kubernetes Deployment**: Deployed on GKE with 3 pods running at all times  
-✅ **CI/CD Pipeline**: Jenkins pipeline for automated build and deployment from GitHub  
-✅ **Source Control**: GitHub repository with complete source code  
-✅ **Documentation**: Comprehensive README and Jenkins setup guide with URLs  
-✅ **Public Access**: Application accessible via external LoadBalancer IP  
-✅ **Jenkins Integration**: Automated CI/CD with GitHub webhooks and GKE deployment  
-
-## Author
-**Apollo (Aswin)**  
-SWE 645 - Fall 2025  
-George Mason University
-
----
-*🤖 Generated with [Claude Code](https://claude.ai/code)*
+✅ **Containerization**: Application containerized using Docker with Tomcat base image
+✅ **Kubernetes Deployment**: Deployed on GKE with 3 pods running at all times
+✅ **CI/CD Pipeline**: Jenkins pipeline for automated build and deployment from GitHub
+✅ **Source Control**: GitHub repository with complete source code
+✅ **Documentation**: Comprehensive README and Jenkins setup guide with URLs
+✅ **Public Access**: Application accessible via external LoadBalancer IP
+✅ **Jenkins Integration**: Automated CI/CD with GitHub webhooks and GKE deployment
