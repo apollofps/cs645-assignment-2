@@ -1,8 +1,16 @@
 # SWE645 Assignment 2: Containerized Student Survey Application
 
+Submission By: 
+
+Aswin Rajendran - G01524875
+
+Jenish Patel -G01502543
+
+Evangelin kopela - G01551940
+
 ## Overview
 
-This project containerizes the Student Survey web application from Assignment 1 and deploys it on Google Kubernetes Engine (GKE) with a CI/CD pipeline using Cloud Build.
+This project containerizes the Student Survey web application from Assignment 1 and deploys it on Google Kubernetes Engine (GKE) with a CI/CD pipeline using Jenkins.
 
 ## Application URLs
 
@@ -20,13 +28,13 @@ This project containerizes the Student Survey web application from Assignment 1 
 
 - **Jenkins Dashboard**: http://34.133.54.193
 - **Login**: admin / admin123
-- **Status**: ✅ Fully configured and ready for pipeline creation
+- **Status**: Fully configured and ready for pipeline creation
 - **Service Account**: jenkins-ci@alpine-beacon-473720-s5.iam.gserviceaccount.com
 - **Setup Guide**: See JENKINS_SETUP.md for pipeline configuration
 
 ## Architecture
 
-### Container Technology
+### Container
 
 - **Base Image**: tomcat:9.0-jdk11-openjdk
 - **Application**: Java web application (.war file) with static HTML files
@@ -197,6 +205,30 @@ kubectl describe pod <pod-name> -n swe645
 # Check HPA status
 kubectl get hpa -n swe645
 ```
+
+## Contributions
+
+This project was completed collaboratively by 3 team members with equal distribution of work:
+
+### Aswin Rajendran
+
+- Docker containerization and Dockerfile configuration
+- Kubernetes deployment manifests
+- Application deployment and service configuration
+
+### Jenish Patel
+
+- Jenkins CI/CD pipeline setup and configuration
+- Jenkinsfile creation and pipeline automation
+- Jenkins deployment on GKE
+- GitHub integration and webhook configuration
+
+### Eva Kopella 
+
+- Horizontal Pod Autoscaler (HPA) configuration
+- Application testing and troubleshooting
+- Documentation (README) and project structure
+- Final integration testing and deployment validation
 
 ## Assignment Requirements Fulfilled
 
